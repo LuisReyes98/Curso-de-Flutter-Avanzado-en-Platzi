@@ -1,7 +1,7 @@
-import 'dart:async';
+// import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'platzi_trips.dart';
+// import 'platzi_trips.dart';
 import 'platzi_trips_cupertino.dart';
 
 void main() => runApp(MyApp());
