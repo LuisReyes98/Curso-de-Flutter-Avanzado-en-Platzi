@@ -1,4 +1,0 @@
-#Sat Jul 06 00:46:20 VET 2019
-base.0=/home/luis/Documents/my_projects/flutter/Curso-de-Flutter-Avanzado-en-Platzi/build/app/intermediates/transforms/dexMerger/debug/0
-path.0=classes.dex
-renamed.0=classes.dex
