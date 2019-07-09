@@ -58,3 +58,4 @@ build/**
 # End of https://www.gitignore.io/api/flutter
 
 android/app/google-services.json
+log.txt
