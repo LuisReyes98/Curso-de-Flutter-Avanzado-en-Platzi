@@ -38,7 +38,7 @@ class ProfileHeader extends StatelessWidget {
 
   Widget showProfileData(AsyncSnapshot snapshot){
     if (!snapshot.hasData || snapshot.hasError) {
-      print("No Logueado");
+      // print("No Logueado");
       return Container(
         margin: EdgeInsets.only(
             left: 20.0,
@@ -53,9 +53,9 @@ class ProfileHeader extends StatelessWidget {
         ),
       );
     }else{
-      print("Logueado");
-      print("Snapshot data");
-      print(snapshot.data);
+      // print("Logueado");
+      // print("Snapshot data");
+      // print(snapshot.data);
       user = User(
         name: snapshot.data.displayName,
         email: snapshot.data.email,
