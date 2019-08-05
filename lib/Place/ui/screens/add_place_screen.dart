@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:platzi_trips_app/Place/ui/screens/title_input_location.dart';
 import 'package:platzi_trips_app/widgets/gradient_back.dart';
+import 'package:platzi_trips_app/widgets/text_input.dart';
 import 'package:platzi_trips_app/widgets/title_header.dart';
 
 
@@ -22,8 +24,9 @@ class AddPlaceScreen extends StatefulWidget {
 class _AddPlaceScreen extends State<AddPlaceScreen> {
   @override
   Widget build(BuildContext context) {
-    // double screenWidth = MediaQuery.of(context).size.width;//ancho de la pantalla
-
+    final _controllerTitlePlace = TextEditingController();
+    final _controllerDescriptionPlace = TextEditingController();
+    final _controllerLocationPlace = TextEditingController();
 
     return Scaffold(
       body: Stack(
@@ -56,6 +59,37 @@ class _AddPlaceScreen extends State<AddPlaceScreen> {
                 ),
               )
               ],
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 120.0, bottom: 20.0),
+              child: ListView(
+                children: <Widget>[
+                  Container(),//Foto
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20.0),
+                    child: TextInput(
+                      hintText: "Title",
+                      inputType: null,
+                      maxLines: 1,
+                      controller: _controllerTitlePlace,
+                    ),
+                  ),
+                  TextInput(
+                    hintText: "Description",
+                    inputType: TextInputType.multiline,
+                    maxLines: 4,
+                    controller: _controllerDescriptionPlace,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 20.0),
+                    child: TextInputLocation(
+                      hintText: "Add Location",
+                      iconData: Icons.location_on,
+                      controller: _controllerLocationPlace,
+                    ),
+                  ),
+                ],
+              ),
             ),
         ],
       ),
