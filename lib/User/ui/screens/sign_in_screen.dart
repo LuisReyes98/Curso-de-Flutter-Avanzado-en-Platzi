@@ -18,6 +18,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreen extends State<SignInScreen> {
   UserBloc userBloc;
   double screenWidth;
+  bool isLoading = false;
 
 
   @override
@@ -42,7 +43,13 @@ class _SignInScreen extends State<SignInScreen> {
     );
   }
 
-  Widget signInGoogleUI(){
+  Widget _loadingView() {
+    return new Center(
+      child: new CircularProgressIndicator(),
+    );
+  }
+
+  Widget signInGoogleUI(){    
     return Scaffold(
       body: Stack(
         alignment: Alignment.center,
@@ -58,6 +65,7 @@ class _SignInScreen extends State<SignInScreen> {
                   width: screenWidth,
                   child: Text(
                     "Welcome \n This is your travel App",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 37.0,
                       fontFamily: "Lato",
@@ -70,20 +78,31 @@ class _SignInScreen extends State<SignInScreen> {
               ButtonGreen(
                 text: "Login with Gmail",
                 onPressed: (){
+                  isLoading = true;
                   userBloc.signOut();
                   userBloc.signIn().then((FirebaseUser user) {
+
                     userBloc.updateUserData(User(
                       uid: user.uid,
                       name: user.displayName,
                       email: user.email,
                       photoURL: user.photoUrl,
                     ));
+                    isLoading = false;
                   });
+                  // isLoading = false;
+
                 },
                 width: 300.0,
                 height: 50.0,
               )
             ],
+          ),
+          Center(
+            child: isLoading ? CircularProgressIndicator(
+              strokeWidth: 8.0,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blueGrey)
+            ) : Container(),
           )
         ],
       ),
