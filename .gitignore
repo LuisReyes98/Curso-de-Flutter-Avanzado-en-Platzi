@@ -60,3 +60,4 @@ build/**
 
 android/app/google-services.json
 log.txt
+build/

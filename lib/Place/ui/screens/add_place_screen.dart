@@ -1,8 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:generic_bloc_provider/generic_bloc_provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:platzi_trips_app/Place/model/place.dart';
 import 'package:platzi_trips_app/Place/ui/screens/title_input_location.dart';
 import 'package:platzi_trips_app/Place/ui/widgets/card_image.dart';
+import 'package:platzi_trips_app/User/bloc/bloc_user.dart';
 import 'package:platzi_trips_app/widgets/button_purple.dart';
 import 'package:platzi_trips_app/widgets/gradient_back.dart';
 import 'package:platzi_trips_app/widgets/text_input.dart';
@@ -11,6 +15,7 @@ import 'package:platzi_trips_app/widgets/title_header.dart';
 
 class AddPlaceScreen extends StatefulWidget {
   File image;
+  String dummyImagePath = "assets/img/mountain_stars.jpeg";
 
   AddPlaceScreen({
     Key key,
@@ -24,8 +29,13 @@ class AddPlaceScreen extends StatefulWidget {
 }
 
 class _AddPlaceScreen extends State<AddPlaceScreen> {
+
+
   @override
   Widget build(BuildContext context) {
+
+    UserBloc userBloc = BlocProvider.of<UserBloc>(context);
+
     final _controllerTitlePlace = TextEditingController();
     final _controllerDescriptionPlace = TextEditingController();
     final _controllerLocationPlace = TextEditingController();
@@ -73,9 +83,16 @@ class _AddPlaceScreen extends State<AddPlaceScreen> {
                       width: 300.0,
                       height: 250.0,
                       marginLeft: 0.0,
-                      pathImage:"assets/img/sunset.jpeg", // widget.image.path,
+                      pathImage: widget.image == null ? widget.dummyImagePath : widget.image.path,
                       iconData: Icons.camera_alt,
-                      onPressedFabIcon: (){},
+                      onPressedFabIcon: () async {
+
+                        File _image;
+                        _image = await ImagePicker.pickImage(source: ImageSource.camera);
+                        setState(() {
+                          widget.image = _image;
+                        });
+                      },
 
                     ),
                   ),//Foto
@@ -112,7 +129,14 @@ class _AddPlaceScreen extends State<AddPlaceScreen> {
 
                         //2. Cloud Firestore
                         // Place - title, description, url, userOwner, likes
-
+                        userBloc.updatePlaceData(Place(
+                          name: _controllerTitlePlace.text,
+                          description: _controllerDescriptionPlace.text,
+                          likes: 0,
+                        )).whenComplete((){
+                          print("Termino");
+                          Navigator.pop(context);
+                        });
                       },
                     ),
                   ),

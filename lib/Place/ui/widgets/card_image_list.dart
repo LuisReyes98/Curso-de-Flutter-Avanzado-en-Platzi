@@ -28,7 +28,9 @@ class CardImageList extends StatelessWidget {
           CardImageFabIcon(
             width: 350.0,
             height: 250.0,
-            onPressedFabIcon: (){},
+            onPressedFabIcon: (){
+
+            },
             iconData: Icons.favorite_border,
             marginLeft: 20.0,
             pathImage:"assets/img/mountain_stars.jpeg"),
