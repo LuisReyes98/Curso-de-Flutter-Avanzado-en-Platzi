@@ -62,3 +62,4 @@ android/app/google-services.json
 log.txt
 build/
 test/
+!test/widget_test.dart
