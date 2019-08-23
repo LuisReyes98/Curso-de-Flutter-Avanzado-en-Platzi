@@ -5,9 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:platzi_trips_app/Place/model/place.dart';
 import 'package:platzi_trips_app/User/model/user.dart';
+import 'package:platzi_trips_app/User/ui/widgets/profile_place.dart';
 
 class CloudFirestoreAPI {
-  final String USER = "users";
+  final String USERS = "users";
   final String PLACES = "places";
 
   final Firestore _db = Firestore.instance;
@@ -15,7 +16,7 @@ class CloudFirestoreAPI {
 
 
   void updateUserData(User user) async{
-    DocumentReference ref = _db.collection(USER).document(user.uid);
+    DocumentReference ref = _db.collection(USERS).document(user.uid);
 
     return await ref.setData({
       'uid': user.uid,
@@ -38,13 +39,39 @@ class CloudFirestoreAPI {
             'name': place.name,
             'description': place.description,
             'likes': place.likes,
-            'userOwner': "$USER/${user.uid}" //reference
+            'userOwner': _db.document("$USERS/${user.uid}"),//reference
+            'urlImage': place.urlImage,
           }
-
-        );
+        ).then((DocumentReference dr){
+          dr.get().then((DocumentSnapshot snapshot){
+            //ID Place REFERENCIA ARRAY
+            DocumentReference refUsers = _db.collection(USERS).document(user.uid);
+            refUsers.updateData({
+              'myPlaces' : FieldValue.arrayUnion([_db.document("$PLACES/${snapshot.documentID}")])
+            });
+          });
+        });
 
       }
     );
+
+  }
+
+    List<ProfilePlace> buildPlaces(List<DocumentSnapshot> placesListSnapshot){
+      List<ProfilePlace> profilePlaces = List<ProfilePlace>();
+      placesListSnapshot.forEach((p) {
+        profilePlaces.add(
+          ProfilePlace(
+            Place(
+              name: p.data['name'],
+              description: p.data['description'],
+              urlImage: p.data['urlImage']
+            )
+          )
+        );
+      });
+
+    return profilePlaces;
 
   }
 }
