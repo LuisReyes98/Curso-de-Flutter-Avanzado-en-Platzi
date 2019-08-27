@@ -44,7 +44,8 @@ class CloudFirestoreAPI {
           }
         ).then((DocumentReference dr){
           dr.get().then((DocumentSnapshot snapshot){
-            //ID Place REFERENCIA ARRAY
+            //snapshot.documentID;//ID Place REFERENCIA ARRAY
+
             DocumentReference refUsers = _db.collection(USERS).document(user.uid);
             refUsers.updateData({
               'myPlaces' : FieldValue.arrayUnion([_db.document("$PLACES/${snapshot.documentID}")])
@@ -65,7 +66,8 @@ class CloudFirestoreAPI {
             Place(
               name: p.data['name'],
               description: p.data['description'],
-              urlImage: p.data['urlImage']
+              urlImage: p.data['urlImage'],
+              likes: p.data['likes'],
             )
           )
         );

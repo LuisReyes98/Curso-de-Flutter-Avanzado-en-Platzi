@@ -30,14 +30,14 @@ class UserBloc implements Bloc {
 
   //2.Registrar usuario en base de datos
   final _cloudFirestoreRepository = CloudFirestoreRepository();
-
   void updateUserData(User user) => _cloudFirestoreRepository.updateUserDataFirestore(user);
-
   Future<void> updatePlaceData(Place place) => _cloudFirestoreRepository.updatePlaceData(place);
 
   // stream para subir places
   Stream<QuerySnapshot> placesListStream = Firestore.instance.collection(CloudFirestoreAPI().PLACES).snapshots();
+
   Stream<QuerySnapshot> get placesStream => placesListStream;
+
   List<ProfilePlace> buildPlaces(List<DocumentSnapshot> placesListSnapshot) => _cloudFirestoreRepository.buildPlaces(placesListSnapshot);
 
   //3

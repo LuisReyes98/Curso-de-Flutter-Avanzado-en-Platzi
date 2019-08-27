@@ -17,6 +17,7 @@ import 'package:platzi_trips_app/widgets/title_header.dart';
 
 class AddPlaceScreen extends StatefulWidget {
   File image;
+  bool isLoading = false;
   String dummyImagePath = "assets/img/mountain_stars.jpeg";
 
   AddPlaceScreen({
@@ -42,12 +43,44 @@ class _AddPlaceScreen extends State<AddPlaceScreen> {
     final _controllerDescriptionPlace = TextEditingController();
     final _controllerLocationPlace = TextEditingController();
 
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          GradientBack(
-            height: 300.0,),
-          Row(
+    void upload() {
+      //ID del usuario logeado actualmente
+        userBloc.currentUser.then((FirebaseUser user){
+          if (user != null) {
+            String uid = user.uid;
+            String path = "$uid/${DateTime.now().toString()}.jpg";
+            //1. Firebase Storage
+            //url
+            userBloc.uploadFile(path, widget.image)
+              .then((StorageUploadTask storageUploadTask){
+                storageUploadTask.onComplete.then((StorageTaskSnapshot  snapshot){
+                  snapshot.ref.getDownloadURL().then((urlImage){
+                    print("URL_IMAGE: $urlImage");
+
+                    //2. Cloud Firestore
+                    // Place - title, description, url, userOwner, likes
+
+                    userBloc.updatePlaceData(Place(
+                      name: _controllerTitlePlace.text,
+                      description: _controllerDescriptionPlace.text,
+                      likes: 0,
+                      urlImage: urlImage,
+                    )).whenComplete((){
+                      print("Termino");
+                      Navigator.pop(context);
+                    });
+                });
+              });
+            });
+          }  // fin if user
+        });
+
+    }
+
+    GradientBack gradient = GradientBack(
+            height: 300.0,);
+
+    Row header = Row(
             children: <Widget>[
               Container(
                 padding: EdgeInsets.only( top: 25.0, left: 5.0),
@@ -73,8 +106,12 @@ class _AddPlaceScreen extends State<AddPlaceScreen> {
                 ),
               )
               ],
-            ),
-            Container(
+            );
+    Center loaderUI = Center(
+              child: widget.isLoading ? CircularProgressIndicator() : Container(),
+            );
+
+    Container form = Container(
               margin: EdgeInsets.only(top: 120.0, bottom: 20.0),
               child: ListView(
                 children: <Widget>[
@@ -82,6 +119,7 @@ class _AddPlaceScreen extends State<AddPlaceScreen> {
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(bottom: 20.0),
                     child: CardImageFabIcon(
+                      internet: false,
                       width: 300.0,
                       height: 250.0,
                       marginLeft: 0.0,
@@ -126,43 +164,29 @@ class _AddPlaceScreen extends State<AddPlaceScreen> {
                     child: ButtonPurple(
                       buttonText: "Add Place",
                       onPressed: (){
-                        //ID del usuario logeado actualmente
-                        userBloc.currentUser.then((FirebaseUser user){
-                          if (user != null) {
-                            String uid = user.uid;
-                            String path = "$uid/${DateTime.now().toString()}.jpg";
-                            //1. Firebase Storage
-                            //url
-                            userBloc.uploadFile(path, widget.image)
-                              .then((StorageUploadTask storageUploadTask){
-                                storageUploadTask.onComplete.then((StorageTaskSnapshot  snapshot){
-                                  snapshot.ref.getDownloadURL().then((urlImage){
-                                    print("URL_IMAGE: $urlImage");
-
-                                    //2. Cloud Firestore
-                                    // Place - title, description, url, userOwner, likes
-
-                                    userBloc.updatePlaceData(Place(
-                                      name: _controllerTitlePlace.text,
-                                      description: _controllerDescriptionPlace.text,
-                                      likes: 0,
-                                      urlImage: urlImage,
-                                    )).whenComplete((){
-                                      print("Termino");
-                                      Navigator.pop(context);
-                                    });
-                                });
-                              });
-                            });
-                          }  // fin if user
-                        });
-
+                        // FocusScope.of(context).requestFocus(new FocusNode());
+                        print("Click boton subir");
+                        if (!widget.isLoading) {
+                          print("Subiendo");
+                          upload();
+                          setState(() {
+                            widget.isLoading = true;
+                          });
+                        }
                       },
                     ),
                   ),
                 ],
               ),
-            ),
+            );
+
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          gradient,
+          header,
+          form,
+          loaderUI
         ],
       ),
     );

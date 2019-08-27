@@ -28,15 +28,15 @@ class ProfilePlaceInfo extends StatelessWidget {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                this.place.name,
-                style: TextStyle(
-                    color: Color.fromRGBO(0, 0, 0, 0.4),
-                    fontFamily: 'Lato',
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.bold
-                ),
-              ),
+              // Text(
+              //   this.place.name,
+              //   style: TextStyle(
+              //       color: Color.fromRGBO(0, 0, 0, 0.4),
+              //       fontFamily: 'Lato',
+              //       fontSize: 12.0,
+              //       fontWeight: FontWeight.bold
+              //   ),
+              // ),
               Text(
                 this.place.description,
                 style: TextStyle(
@@ -51,7 +51,7 @@ class ProfilePlaceInfo extends StatelessWidget {
     );
 
     final steps = Text(
-      'Likes ${this.place.likes}',
+      'Likes: ${this.place.likes}',
       style: TextStyle(
           fontFamily: 'Lato',
           fontSize: 14.0,
