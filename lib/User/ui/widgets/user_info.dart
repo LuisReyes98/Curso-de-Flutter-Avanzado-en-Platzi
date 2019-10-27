@@ -5,7 +5,7 @@ class UserInfo extends StatelessWidget {
 
   User user;
 
-  UserInfo( @required this.user);
+  UserInfo( this.user);
 
   @override
   Widget build(BuildContext context) {

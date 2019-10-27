@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:generic_bloc_provider/generic_bloc_provider.dart';
 import 'package:platzi_trips_app/Place/model/place.dart';
 import 'package:platzi_trips_app/Place/repository/firebase_storage_repository.dart';
+import 'package:platzi_trips_app/Place/ui/widgets/card_image.dart';
 import 'package:platzi_trips_app/User/model/user.dart';
 import 'package:platzi_trips_app/User/repository/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,12 +39,16 @@ class UserBloc implements Bloc {
 
   Stream<QuerySnapshot> get placesStream => placesListStream;
 
-  List<ProfilePlace> buildMyPlaces(List<DocumentSnapshot> placesListSnapshot) => _cloudFirestoreRepository.buildMyPlaces(placesListSnapshot);
+  List<Place> buildPlaces(List<DocumentSnapshot> placesListSnapshot, User user) => _cloudFirestoreRepository.buildPlaces(placesListSnapshot, user);
 
   Stream<QuerySnapshot> myPlacesListStream(String uid) => Firestore.instance.collection(CloudFirestoreAPI().PLACES)
   .where("userOwner", isEqualTo: Firestore.instance.document("${CloudFirestoreAPI().USERS}/$uid"))
   .snapshots()
   ;
+
+  List<ProfilePlace> buildMyPlaces(List<DocumentSnapshot> placesListSnapshot) => _cloudFirestoreRepository.buildMyPlaces(placesListSnapshot);
+
+  Future likePlace(Place place, String uid) => _cloudFirestoreRepository.likePlace(place,uid);
 
   //3
   final _firebaseStorageRepository = FirebaseStorageRepository();
@@ -55,6 +60,9 @@ class UserBloc implements Bloc {
 
   @override
   void dispose() {
-    // TODO: implement dispose
   }
+
+  StreamController placeSelectedStreamController =  StreamController<Place>();
+  Stream<Place> get placeSelectedStream => placeSelectedStreamController.stream;
+  StreamSink<Place> get placeSelectedSink =>  placeSelectedStreamController.sink;
 }

@@ -12,7 +12,7 @@ class  CardImageFabIcon extends StatelessWidget {
 
   final String pathImage;
 
-  bool internet = true;
+  final bool internet;
 
   CardImageFabIcon({
     Key key,
@@ -22,8 +22,7 @@ class  CardImageFabIcon extends StatelessWidget {
     @required this.onPressedFabIcon,
     @required this.iconData,
     this.marginLeft,
-    @required this.internet,
-
+    this.internet = true,
   });
 
   @override

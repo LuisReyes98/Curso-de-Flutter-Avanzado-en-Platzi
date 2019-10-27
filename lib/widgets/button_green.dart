@@ -17,7 +17,6 @@ class ButtonGreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _ButtonGreen();
   }
 }
@@ -27,7 +26,6 @@ class _ButtonGreen extends State<ButtonGreen>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return InkWell(
       onTap: widget.onPressed,
       child: Container(

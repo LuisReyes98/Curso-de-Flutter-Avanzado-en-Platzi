@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:generic_bloc_provider/generic_bloc_provider.dart';
-import 'package:platzi_trips_app/User/bloc/bloc_user.dart';
 import 'package:platzi_trips_app/User/model/user.dart';
 import 'package:platzi_trips_app/User/ui/widgets/user_info.dart';
 import 'package:platzi_trips_app/User/ui/widgets/button_bar.dart';
@@ -9,7 +7,7 @@ class ProfileHeader extends StatelessWidget {
   // UserBloc userBloc;
   User user;
   
-  ProfileHeader(@required this.user);
+  ProfileHeader( this.user);
   
   @override
   Widget build(BuildContext context) {
